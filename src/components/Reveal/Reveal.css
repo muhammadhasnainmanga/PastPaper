@@ -1,0 +1,15 @@
+.reveal { --ease: cubic-bezier(0.22, 1, 0.36, 1); }
+
+.reveal--up {
+  opacity: 0; transform: translateY(20px);
+  transition: opacity 0.9s var(--ease) var(--d, 0ms), transform 0.9s var(--ease) var(--d, 0ms);
+}
+.reveal--up.is-in { opacity: 1; transform: none; }
+
+/* heading lines: text rises out of a mask. The padding keeps letters like p and g from being clipped. */
+.reveal--line { display: block; overflow: hidden; padding: 0.06em 0 0.16em; margin: -0.06em 0 -0.16em; }
+.reveal--line > .reveal__inner {
+  display: block; transform: translateY(105%);
+  transition: transform 1s var(--ease) var(--d, 0ms);
+}
+.reveal--line.is-in > .reveal__inner { transform: none; }

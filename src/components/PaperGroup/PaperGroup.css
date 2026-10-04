@@ -1,0 +1,77 @@
+.pgroup {
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  border-radius: 28px; background: rgba(255, 255, 255, 0.88);
+  -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 12px 36px rgba(25, 70, 50, 0.07), 0 0 0 1px rgba(25, 70, 50, 0.05);
+  animation: pgroup-in 0.7s var(--ease) both;
+  animation-delay: calc(var(--i, 0) * 80ms + 60ms);
+}
+@keyframes pgroup-in { from { opacity: 0; transform: translateY(16px); } }
+
+/* header: [ title  meta  chevron ] [ download all ] */
+.pgroup__head { display: flex; align-items: center; gap: 6px; padding: 8px 12px 8px 8px; }
+.pgroup__toggle {
+  flex: 1; min-width: 0; display: flex; align-items: center; gap: 12px;
+  padding: 12px 14px; border-radius: 20px; text-align: left; transition: background 0.2s ease;
+}
+button.pgroup__toggle:hover { background: var(--green-50); }
+.pgroup__title { font-size: 1.2rem; font-weight: 700; letter-spacing: -0.03em; }
+.pgroup__meta { padding: 3px 10px; border-radius: 999px; font-size: 0.76rem; font-weight: 600; color: var(--green-700); background: var(--green-50); white-space: nowrap; }
+.pgroup__chev { margin-left: auto; color: var(--ink-soft); transition: transform 0.45s var(--ease); }
+.pgroup.is-collapsed .pgroup__chev { transform: rotate(-90deg); }
+
+.pgroup__dlall {
+  flex: none; display: grid; place-items: center; width: 46px; height: 46px; border-radius: 50%;
+  color: var(--green-700); background: #fff; border: 1px solid var(--line);
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+.pgroup__dlall:hover { background: var(--green-700); color: #fff; }
+.pgroup__dlall:active { transform: scale(0.94); }
+.pgroup__dlall.is-off { opacity: 0.4; }
+
+/* collapse: animates the height smoothly */
+.pgroup__body { display: grid; grid-template-rows: 1fr; transition: grid-template-rows 0.5s var(--ease); }
+.pgroup.is-collapsed .pgroup__body { grid-template-rows: 0fr; }
+.pgroup__inner { min-height: 0; overflow: hidden; transition: opacity 0.35s ease; }
+.pgroup.is-collapsed .pgroup__inner { opacity: 0; }
+
+/* rows */
+.prow {
+  display: grid; grid-template-columns: 96px 1fr; align-items: center; gap: 14px;
+  padding: 12px 18px; border-top: 1px solid var(--line);
+}
+.prow:last-child { padding-bottom: 16px; }
+.prow__label { font-size: 1rem; font-weight: 700; letter-spacing: -0.02em; }
+.prow__btns { display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: 10px; }
+
+/* split button: [ label | download ] */
+.pbtn {
+  display: flex; align-items: stretch; min-height: 52px; border-radius: 16px; overflow: hidden;
+  background: #fff; border: 1px solid var(--line);
+  transition: border-color 0.2s ease, box-shadow 0.25s ease;
+}
+.pbtn:not(.is-off):hover { border-color: rgba(63, 174, 125, 0.55); box-shadow: 0 10px 22px -12px rgba(25, 70, 50, 0.4); }
+.pbtn__open {
+  flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center;
+  padding: 8px 14px; font-size: 0.92rem; font-weight: 600; letter-spacing: -0.01em; transition: background 0.2s ease;
+}
+a.pbtn__open:hover { background: var(--green-50); }
+.pbtn__dl {
+  display: grid; place-items: center; width: 46px; border-left: 1px solid var(--line);
+  color: var(--green-700); transition: background 0.2s ease, color 0.2s ease;
+}
+.pbtn__dl:hover { background: var(--green-700); color: #fff; }
+.pbtn__na { font-size: 0.72rem; font-weight: 500; color: var(--ink-soft); }
+.pbtn.is-off { background: transparent; border-style: dashed; }
+.pbtn.is-off .pbtn__label { color: var(--ink-soft); font-weight: 500; }
+
+/* phones: three tiles per row, label on top, download strip underneath */
+@media (max-width: 560px) {
+  .prow { grid-template-columns: 1fr; gap: 10px; padding: 12px 14px; }
+  .prow__btns { gap: 8px; }
+  .prow:not(.is-single) .pbtn { flex-direction: column; }
+  .prow:not(.is-single) .pbtn__open { align-items: center; text-align: center; padding: 12px 6px 10px; font-size: 0.84rem; }
+  .prow:not(.is-single) .pbtn__dl { width: auto; height: 38px; border-left: 0; border-top: 1px solid var(--line); }
+  .pgroup__title { font-size: 1.1rem; }
+}

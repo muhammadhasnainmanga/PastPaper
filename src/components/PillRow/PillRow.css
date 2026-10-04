@@ -1,0 +1,49 @@
+.pillrow { display: grid; grid-template-columns: 76px 1fr; gap: 12px; align-items: start; }
+.pillrow__label { padding-top: 10px; font-size: 0.8rem; font-weight: 600; color: var(--ink-soft); }
+.pillrow__pills { position: relative; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+
+/* dropdown aligns under the row instead of stretching across it */
+.pillrow__pills > .select__menu { min-width: 230px; width: max-content; max-width: min(300px, 86vw); }
+
+.pill {
+  position: relative; display: inline-flex; align-items: center; gap: 6px;
+  min-height: 38px; padding: 0 14px; border-radius: 999px;
+  font-size: 0.9rem; font-weight: 600; letter-spacing: -0.01em;
+  color: var(--green-700); background: var(--green-50); border: 1px solid rgba(63, 174, 125, 0.35);
+  animation: pill-in 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+@keyframes pill-in { from { opacity: 0; transform: scale(0.88); } }
+
+.pill__x {
+  position: relative; display: grid; place-items: center; flex: none;
+  width: 20px; height: 20px; margin-right: -6px; border-radius: 50%;
+  color: var(--green-700); background: rgba(31, 115, 80, 0.12);
+  transition: background 0.2s ease, color 0.2s ease, width 0.2s ease, opacity 0.2s ease, margin 0.2s ease;
+}
+.pill__x::after { content: ''; position: absolute; inset: -10px; }   /* bigger touch target */
+.pill__x:hover { background: var(--green-700); color: #fff; }
+
+/* desktop: the × appears on hover or keyboard focus; touch screens always show it */
+@media (hover: hover) {
+  .pill__x { width: 0; margin: 0 0 0 -6px; opacity: 0; overflow: visible; pointer-events: none; }
+  .pill:hover .pill__x, .pill:focus-within .pill__x {
+    width: 20px; margin: 0 -6px 0 0; opacity: 1; pointer-events: auto;
+  }
+}
+
+.pill--all { background: #fff; color: var(--ink); border-color: var(--line); cursor: pointer; transition: border-color 0.2s ease; }
+.pill--all:hover { border-color: rgba(63, 174, 125, 0.6); }
+
+.pill--add {
+  width: 38px; padding: 0; justify-content: center; cursor: pointer;
+  background: #fff; border: 1.5px dashed rgba(63, 174, 125, 0.65);
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.3s ease;
+}
+.pill--add svg { transition: transform 0.3s ease; }
+.pill--add:hover { background: var(--green-50); border-style: solid; }
+.pill--add:hover svg, .pill--add[aria-expanded='true'] svg { transform: rotate(90deg); }
+
+@media (max-width: 560px) {
+  .pillrow { grid-template-columns: 1fr; gap: 8px; }
+  .pillrow__label { padding-top: 0; }
+}

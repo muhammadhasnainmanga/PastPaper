@@ -1,0 +1,29 @@
+.finder-page { padding-top: 56px; padding-bottom: 96px; display: flex; justify-content: center; }
+
+.finder { width: 100%; max-width: 680px; }
+
+.finder__card {
+  position: relative; z-index: 2;
+  padding: clamp(22px, 4vw, 40px); padding-bottom: calc(clamp(22px, 4vw, 40px) + 34px);
+  border-radius: 36px; text-align: center;
+  margin-top: 80px;
+  margin-bottom: 80px;
+}
+.finder__title { font-size: clamp(2rem, 6vw, 3rem); font-weight: 800; letter-spacing: -0.045em; line-height: 1; }
+.finder__sub { margin-top: 10px; font-size: 0.98rem; color: var(--ink-soft); }
+
+.finder__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px 16px; margin-top: 28px; }
+
+.finder__summary { margin-top: 24px; min-height: 1.4em; font-size: 0.9rem; color: var(--ink-soft); }
+.finder__summary strong { color: var(--ink); font-weight: 600; }
+
+/* the button overlaps the card's bottom edge, like your sketch */
+.finder__action { position: relative; z-index: 1; display: flex; justify-content: center; margin-top: -30px; }
+.finder__action .btn { min-height: 58px; padding: 0 36px; border-radius: 20px; }
+.finder__action .btn:disabled { opacity: 0.55; cursor: not-allowed; box-shadow: none; }
+.finder-reveal { width: 100%; max-width: 680px; }
+@media (max-width: 480px) {
+  .finder-page { padding-top: 32px; }
+  .finder__grid { grid-template-columns: 1fr; gap: 16px; }
+  .finder__action .btn { width: calc(100% - 32px); }
+}

@@ -1,0 +1,4 @@
+.placeholder { padding-top: 80px; padding-bottom: 80px; display: flex; justify-content: center; }
+.placeholder__card { max-width: 520px; width: 100%; padding: 40px 32px; border-radius: 32px; text-align: center; display: flex; flex-direction: column; gap: 12px; }
+.placeholder__card h1 { font-size: clamp(2rem, 6vw, 3rem); letter-spacing: -0.045em; }
+.placeholder__card p { color: var(--ink-soft); line-height: 1.5; }

@@ -1,0 +1,82 @@
+.select { position: relative; display: flex; flex-direction: column; gap: 8px; min-width: 0; text-align: left; }
+.select.is-open { z-index: 20; }
+.select__label { font-size: 0.8rem; font-weight: 600; color: var(--ink-soft); padding-left: 4px; }
+
+.select__trigger {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  width: 100%; min-height: 54px; padding: 0 16px; border-radius: 16px;
+  font-size: 0.98rem; font-weight: 600; letter-spacing: -0.01em; color: var(--ink);
+  background: rgba(255, 255, 255, 0.85); border: 1px solid var(--line);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+.select__trigger:hover { border-color: rgba(63, 174, 125, 0.55); background: #fff; }
+.select.is-open .select__trigger { border-color: var(--green-500); box-shadow: 0 0 0 4px var(--green-100); background: #fff; }
+.select__trigger.is-muted { color: var(--ink-soft); font-weight: 500; }
+.select__text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.select__chev { flex: none; color: var(--ink-soft); transition: transform 0.3s ease; }
+.select.is-open .select__chev { transform: rotate(180deg); color: var(--green-700); }
+
+.select.is-disabled .select__trigger { opacity: 0.55; cursor: not-allowed; background: rgba(255, 255, 255, 0.5); border-style: dashed; }
+.select.is-disabled .select__trigger:hover { border-color: var(--line); background: rgba(255, 255, 255, 0.5); }
+
+/* menu */
+.select__menu {
+  position: absolute; top: calc(100% + 8px); z-index: 30;
+  min-width: 100%; width: max-content; max-width: min(300px, 86vw);
+  padding: 8px; border-radius: 20px; background: #fff; border: 1px solid var(--line);
+  box-shadow: 0 24px 50px -12px rgba(21, 51, 42, 0.28), 0 4px 12px rgba(21, 51, 42, 0.06);
+  transform-origin: top center; animation: select-pop 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.select__menu--left { left: 0; }
+.select__menu--right { right: 0; }
+@keyframes select-pop { from { opacity: 0; transform: translateY(-6px) scale(0.97); } }
+
+.select__list { max-height: 270px; overflow-y: auto; display: flex; flex-direction: column; gap: 2px; overscroll-behavior: contain; }
+.select__divider { height: 1px; margin: 6px 8px; background: var(--line); }
+
+.select__opt {
+  display: flex; align-items: center; gap: 12px; width: 100%;
+  padding: 11px 12px; border-radius: 12px; text-align: left;
+  font-size: 0.95rem; font-weight: 500; color: var(--ink); transition: background 0.15s ease;
+}
+.select__opt:hover { background: var(--green-50); }
+.select__opt.is-on { background: var(--green-50); font-weight: 600; }
+.select__opt-label { flex: 1; min-width: 0; }
+
+.select__mark {
+  flex: none; display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%;
+  border: 1.5px solid rgba(21, 51, 42, 0.25); color: #fff; transition: background 0.15s ease, border-color 0.15s ease;
+}
+.select__mark.is-box { border-radius: 6px; }
+.select__opt.is-on .select__mark { background: var(--green-600); border-color: var(--green-600); }
+
+.select__done {
+  width: 100%; margin-top: 8px; min-height: 44px; border-radius: 14px;
+  color: #fff; background: var(--dark); font-weight: 600; font-size: 0.92rem;
+}
+
+/* ───────── Phone: bottom sheet ───────── */
+.select__backdrop {
+  position: fixed; inset: 0; z-index: 998;
+  background: rgba(15, 26, 20, 0.35);
+  animation: sheet-fade 0.25s ease;
+}
+.select__menu--sheet {
+  position: fixed; left: 0; right: 0; bottom: 0; top: auto; z-index: 999;
+  width: auto; min-width: 0; max-width: none; text-align: left;
+  padding: 10px 14px calc(14px + env(safe-area-inset-bottom, 0px));
+  border-radius: 28px 28px 0 0; border-bottom: 0;
+  transform-origin: bottom center;
+  animation: sheet-up 0.34s cubic-bezier(0.32, 0.72, 0, 1);
+}
+.select__menu--sheet .select__list { max-height: min(52vh, 380px); }
+.select__menu--sheet .select__opt { padding: 15px 12px; font-size: 1.02rem; }
+.select__menu--sheet .select__done { min-height: 52px; font-size: 1rem; }
+
+.select__grab { width: 40px; height: 4px; margin: 2px auto 10px; border-radius: 4px; background: rgba(21, 51, 42, 0.18); }
+.select__sheet-title { padding: 0 6px 10px; font-size: 1.05rem; font-weight: 700; letter-spacing: -0.02em; }
+
+
+
+@keyframes sheet-up { from { transform: translateY(100%); } }
+@keyframes sheet-fade { from { opacity: 0; } }

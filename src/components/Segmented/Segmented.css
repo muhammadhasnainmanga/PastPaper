@@ -1,0 +1,13 @@
+.seg {
+  display: inline-flex; gap: 2px; padding: 4px; max-width: 100%; border-radius: 16px;
+  background: rgba(255, 255, 255, 0.7); border: 1px solid var(--line);
+  overflow-x: auto; scrollbar-width: none;
+}
+.seg::-webkit-scrollbar { display: none; }
+.seg__btn {
+  flex: none; min-height: 38px; padding: 0 14px; border-radius: 12px;
+  font-size: 0.86rem; font-weight: 600; color: var(--ink-soft); white-space: nowrap;
+  transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+.seg__btn:hover:not(.is-active) { color: var(--ink); background: var(--green-50); }
+.seg__btn.is-active { color: #fff; background: var(--dark); box-shadow: 0 6px 14px rgba(21, 51, 42, 0.22); }

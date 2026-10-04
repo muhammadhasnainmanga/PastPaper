@@ -1,0 +1,22 @@
+{
+  "name": "PastPaper",
+  "version": "1.0.0",
+  "description": "Collection of Past Paper for Sindh Board Students",
+  "main": "server.js",
+  "keywords": [],
+  "author": "Hasnain",
+  "license": "ISC",
+  "type": "commonjs",
+  "scripts": {
+    "start": "nodemon src/server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.5",
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14",
+    "prettier": "^3.9.9"
+  }
+}

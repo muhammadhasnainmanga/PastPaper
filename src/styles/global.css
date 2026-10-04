@@ -1,0 +1,79 @@
+/* ───────── Tokens ───────── */
+:root {
+  /* light, fresh green taken from the board logo */
+  --green-50: #f1f8f4;
+  --green-100: #dff1e6;
+  --green-300: #8fd3ac;
+  --green-500: #3fae7d;
+  --green-600: #2c8f63;
+  --green-700: #1f7350;
+  --dark: #15332a;        /* dark pill buttons, like the black ones in the reference */
+
+  --bg: #fbfdfc;
+  --ink: #0f1a14;
+  --ink-soft: #5a6b62;
+  --line: rgba(25, 70, 50, 0.1);
+
+  --font: 'Inter Tight', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --page-pad: clamp(16px, 4vw, 40px);
+  --maxw: 1140px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; font-family: var(--font); color: var(--ink); background: var(--bg);
+  -webkit-font-smoothing: antialiased; overflow-x: hidden;
+}
+h1, h2, h3, p { margin: 0; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; cursor: pointer; border: 0; background: none; }
+:focus-visible { outline: 3px solid var(--green-500); outline-offset: 3px; border-radius: 12px; }
+
+.app { position: relative; z-index: 1; min-height: 100vh; }
+.container { width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 0 var(--page-pad); }
+
+/* ───────── iOS-style frosted glass ───────── */
+.glass {
+  background: rgba(255, 255, 255, 0.68);
+  -webkit-backdrop-filter: blur(24px) saturate(170%);
+  backdrop-filter: blur(24px) saturate(170%);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 12px 40px rgba(25, 70, 50, 0.08), 0 0 0 1px rgba(25, 70, 50, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95);
+}
+
+/* ───────── Buttons ───────── */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: 52px; padding: 0 28px; border-radius: 18px;
+  font-weight: 600; font-size: 1rem; letter-spacing: -0.01em;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+.btn:active { transform: scale(0.97); }
+.btn--dark { color: #fff; background: var(--dark); box-shadow: 0 10px 24px rgba(21, 51, 42, 0.22); }
+.btn--dark:hover { box-shadow: 0 14px 30px rgba(21, 51, 42, 0.3); }
+.btn--glass {
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.7);
+  -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+  border: 1px solid var(--line);
+}
+.btn--glass:hover { background: #fff; }
+
+.pill-label {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 14px; border-radius: 999px;
+  font-size: 0.8rem; font-weight: 600; color: var(--ink-soft);
+  background: rgba(255, 255, 255, 0.8); border: 1px solid var(--line);
+}
+.pill-label::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--green-500); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+}
+
+/* each page fades up when you arrive, e.g. finder to results */
+.page { animation: page-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) backwards; }
+@keyframes page-in { from { opacity: 0; transform: translateY(14px); } }

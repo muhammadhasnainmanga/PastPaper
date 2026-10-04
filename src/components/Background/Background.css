@@ -1,0 +1,32 @@
+.bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+
+/* grid fades out toward the edges, like the reference */
+.bg__grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(30, 90, 60, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(30, 90, 60, 0.07) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(ellipse 75% 70% at 50% 40%, #000 25%, transparent 80%);
+  mask-image: radial-gradient(ellipse 75% 70% at 50% 40%, #000 25%, transparent 80%);
+}
+
+/* very soft green light so the glass has something to frost */
+.bg__wash { position: absolute; border-radius: 50%; filter: blur(70px); }
+.bg__wash--top {
+  width: 70vw; height: 50vh; left: 15vw; top: -18vh;
+  background: radial-gradient(circle, rgba(143, 211, 172, 0.32), transparent 70%);
+}
+.bg__wash--bottom {
+  width: 60vw; height: 50vh; left: -15vw; bottom: -20vh;
+  background: radial-gradient(circle, rgba(143, 211, 172, 0.22), transparent 70%);
+}
+
+.bg__dots { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+.bg__glow {
+  position: absolute; left: 0; top: 0;
+  width: clamp(300px, 50vw, 520px); aspect-ratio: 1; border-radius: 50%;
+  background: radial-gradient(circle, rgba(111, 205, 156, 0.34), rgba(111, 205, 156, 0.12) 45%, transparent 70%);
+  pointer-events: none; will-change: transform, opacity;
+}

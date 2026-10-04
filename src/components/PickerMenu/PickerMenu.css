@@ -1,0 +1,2 @@
+/* no box of its own: the menu positions itself against the pill row */
+.pickmenu { display: contents; }
