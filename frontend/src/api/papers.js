@@ -11,16 +11,17 @@ const API_BASE = '/api'; // later: import.meta.env.VITE_API_URL
  ─────────── BACKEND CONTRACT (Node.js + SQL + Cloudinary) ───────────
 
  SQL (one row per PDF):
-   papers(id, class, subject_slug, year, type, cloudinary_public_id)
+   papers(id, class, subject_slug, year, type, storage_key, size_bytes)
    type = 'subjective' | 'objective' | 'full'.
    Stream is not stored: a Physics paper is the same for every stream.
 
  1) GET /api/papers?class=11&stream=pre-medical&subjects=physics,chemistry&years=2026,2025
     - subjects / years missing or empty = all of them.
     - Response:
-      { items: [ { subject: 'physics', year: 2026,
-                   files: { subjective: { id: 'abc' }, objective: { id: 'def' }, full: null } } ] }
-    - files.<type> = null when that PDF doesn't exist.
+    { items: [ { subject: 'physics', year: 2026,
+        files: { subjective: { id: 'abc', size: 2411724 }, objective: { id: 'def', size: 880000 }, full: null } 
+      } ] 
+    }
 
  2) GET /api/papers/:id/file      open in the browser
     Look up the row, get the PDF from Cloudinary, stream it with
@@ -72,7 +73,7 @@ function mockPapers({ classLevel, streamId, subjects, years, signal }) {
       files: Object.fromEntries(
         ['subjective', 'objective', 'full'].map((type) => {
           const id = `${classLevel}-${subject}-${year}-${type}`;
-          return [type, hash(id) % 9 === 0 ? null : { id }]; // a few missing, to test "Not available"
+          return [type, hash(id) % 9 === 0 ? null : { id, size: 400000 + (hash(`${id}-size`) % 3600000) }]; // a few missing, to test "Not available"
         })
       ),
     }))

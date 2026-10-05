@@ -15,7 +15,7 @@
   flex: 1; min-width: 0; display: flex; align-items: center; gap: 12px;
   padding: 12px 14px; border-radius: 20px; text-align: left; transition: background 0.2s ease;
 }
-button.pgroup__toggle:hover { background: var(--green-50); }
+button.pgroup__toggle:hover { background : var(--green-50); }
 .pgroup__title { font-size: 1.2rem; font-weight: 700; letter-spacing: -0.03em; }
 .pgroup__meta { padding: 3px 10px; border-radius: 999px; font-size: 0.76rem; font-weight: 600; color: var(--green-700); background: var(--green-50); white-space: nowrap; }
 .pgroup__chev { margin-left: auto; color: var(--ink-soft); transition: transform 0.45s var(--ease); }
@@ -65,6 +65,7 @@ a.pbtn__open:hover { background: var(--green-50); }
 .pbtn__na { font-size: 0.72rem; font-weight: 500; color: var(--ink-soft); }
 .pbtn.is-off { background: transparent; border-style: dashed; }
 .pbtn.is-off .pbtn__label { color: var(--ink-soft); font-weight: 500; }
+.pbtn__size { font-size: 0.72rem; font-weight: 500; color: var(--ink-soft); }
 
 /* phones: three tiles per row, label on top, download strip underneath */
 @media (max-width: 560px) {

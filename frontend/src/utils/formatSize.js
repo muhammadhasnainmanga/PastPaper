@@ -1,0 +1,6 @@
+// 2411724 -> "2.3 MB", 350000 -> "342 KB"
+export function formatSize(bytes) {
+  if (!bytes) return '';
+  if (bytes < 1024 * 1024) return `${Math.max(1, Math.round(bytes / 1024))} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
