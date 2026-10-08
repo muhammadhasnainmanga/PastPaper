@@ -8,12 +8,15 @@
   "license": "ISC",
   "type": "commonjs",
   "scripts": {
-    "start": "nodemon src/server.js"
+    "start": "nodemon src/server.js",
+    "test:storage": "node src/scripts/test-storage.js"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1147.0",
     "cors": "^2.8.6",
     "dotenv": "^18.0.5",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "pg": "^8.23.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.14",

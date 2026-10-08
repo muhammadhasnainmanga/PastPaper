@@ -1,25 +1,36 @@
-require('dotenv').config();
+require('dotenv').config(); // must run first, so the other files can read .env
 const app = require('./app.js');
-const { error } = require('node:console');
-const Port = process.env.PORT || 3000;
+const { pool, connectDb } = require('./config/db.js');
 
-const StartServer = async () =>  {
-    try {
-        // await ConnectDb();
+const PORT = process.env.PORT || 3000;
 
-        app.on("error", (error) => {
-            console.log("Error :", error);
-            throw error;
-        })
+const startServer = async () => {
+  try {
+    await connectDb(); // stop here if the database is not reachable
 
-        app.listen(Port, () => {
-            console.log(`Server is listening on Port ${Port}`);
-        })
+    const server = app.listen(PORT, () => {
+      console.log(`Server is listening on port ${PORT}`);
+    });
 
-    } catch (error) {
-        console.log(error, 'Can not start Server, App is not connected');
-        process.exit(1);
-    }   
-}
+    server.on('error', (err) => {
+      console.error('Server error:', err.message);
+      process.exit(1);
+    });
 
-StartServer();
+    // close things cleanly on Ctrl+C or when a host stops the app
+    const shutdown = (signal) => {
+      console.log(`${signal} received, shutting down`);
+      server.close(async () => {
+        await pool.end();
+        process.exit(0);
+      });
+    };
+    process.on('SIGINT', () => shutdown('SIGINT'));
+    process.on('SIGTERM', () => shutdown('SIGTERM'));
+  } catch (err) {
+    console.error('Could not start server:', err.message);
+    process.exit(1);
+  }
+};
+
+startServer();
