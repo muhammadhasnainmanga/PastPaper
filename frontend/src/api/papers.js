@@ -4,7 +4,7 @@ import { toast } from '../components/Toast/Toast.jsx';
 // ───────────────────────── SERVER SWITCH ─────────────────────────
 // false = fake data generated here so you can build the UI.
 // true  = real calls to your Node.js server.
-export const SERVER_READY = false;
+export const SERVER_READY = true;
 const API_BASE = '/api'; // later: import.meta.env.VITE_API_URL
 
 /*
@@ -48,7 +48,8 @@ export async function fetchPapers({ classLevel, streamId, subjects, years, signa
 
 export const paperOpenUrl = (id) => `${API_BASE}/papers/${id}/file`;
 export const paperDownloadUrl = (id) => `${API_BASE}/papers/${id}/download`;
-export const groupDownloadUrl = (ids) => `${API_BASE}/papers/zip?ids=${ids.join(',')}`;
+export const groupDownloadUrl = (ids) =>
+  `${API_BASE}/papers/zip?ids=${encodeURIComponent(ids.join(','))}`;
 
 // While the server isn't ready, links show a message instead of opening a dead URL.
 export function guardLink(e) {

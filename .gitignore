@@ -18,3 +18,9 @@ Thumbs.db
 
 # Editor
 .vscode/
+
+#data
+.papers-data
+papers-data
+.books-data
+books-data

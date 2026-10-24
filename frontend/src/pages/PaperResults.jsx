@@ -34,25 +34,30 @@ function buildGroups(items, groupBy, subjectOptions) {
   const bySubject = (a, b) => order.indexOf(a.subject) - order.indexOf(b.subject);
   const sorted = [...items].sort((a, b) =>
     groupBy === 'subject' ? bySubject(a, b) || b.year - a.year : b.year - a.year || bySubject(a, b)
-  );
+  ); // stable sort: papers of the same subject-year keep the server's group order
 
   const map = new Map();
   sorted.forEach((it) => {
     const key = groupBy === 'subject' ? it.subject : String(it.year);
     if (!map.has(key)) {
-      map.set(key, { key, title: groupBy === 'subject' ? labelOf(it.subject) : key, rows: [] });
+      map.set(key, { key, title: groupBy === 'subject' ? labelOf(it.subject) : key, rows: [], units: new Set() });
     }
-    map.get(key).rows.push({
-      key: `${it.subject}-${it.year}`,
+    const g = map.get(key);
+    g.units.add(groupBy === 'subject' ? it.year : it.subject);
+    g.rows.push({
+      key: `${it.subject}-${it.year}-${it.group?.slug || 'all'}`,
       label: groupBy === 'subject' ? String(it.year) : labelOf(it.subject),
-      name: `${labelOf(it.subject)} ${it.year}`,
+      name: `${labelOf(it.subject)} ${it.year}${it.group ? ` (${it.group.short})` : ''}`,
       files: it.files,
+      group: it.group || null,
     });
   });
 
   return [...map.values()].map((g) => ({
-    ...g,
-    meta: groupBy === 'subject' ? plural(g.rows.length, 'year') : plural(g.rows.length, 'subject'),
+    key: g.key,
+    title: g.title,
+    rows: g.rows,
+    meta: groupBy === 'subject' ? plural(g.units.size, 'year') : plural(g.units.size, 'subject'),
   }));
 }
 
@@ -137,7 +142,8 @@ export default function PaperResults() {
 
   const subjectCount = subjectsSel.length || subjectOptions.length;
   const yearCount = yearsSel.length || YEAR_OPTIONS.length;
-  const total = subjectCount * yearCount;
+  // count the papers actually listed, once loaded (a subject-year with two groups counts as two)
+  const total = state.status === 'ready' ? state.items.length : subjectCount * yearCount;
 
   // the Group-by switch only makes sense when there are several subjects AND several years
   const showSwitch = subjectCount > 1 && yearCount > 1;

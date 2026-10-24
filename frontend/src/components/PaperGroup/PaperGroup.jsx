@@ -44,7 +44,7 @@ export default function PaperGroup({ index, title, meta, rows, show, collapsible
               <div className="prow__label">{row.label}</div>
               <div className="prow__btns">
                 {visible.map((t) => (
-                  <PaperButton key={t.key} type={t} file={row.files[t.key]} name={row.name} />
+                  <PaperButton key={t.key} type={t} file={row.files[t.key]} name={row.name} group={row.group} />
                 ))}
               </div>
             </div>

@@ -5,7 +5,8 @@ import './Navbar.css';
 const LINKS = [
   { to: '/', label: 'Home', end: true },
   { to: '/papers', label: 'Past Papers' },
-  { to: '/developer', label: 'Developer' },
+  { to: '/books', label: 'Books'},
+  { to: '/developer', label: 'Developer' }
 ];
 
 export default function Navbar() {

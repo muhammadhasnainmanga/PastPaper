@@ -7,3 +7,9 @@ export const CloseIcon = (p) => <svg {...base} {...p}><path d="M6 6l12 12M18 6L6
 export const ChevronIcon = (p) => <svg {...base} {...p}><path d="M6 9l6 6 6-6" /></svg>;
 export const DownloadIcon = (p) => <svg {...base} {...p}><path d="M12 4v11M7 11l5 5 5-5M5 20h14" /></svg>;
 export const EditIcon = (p) => <svg {...base} {...p}><path d="M4 20h4L19 9l-4-4L4 16v4zM13.5 6.5l4 4" /></svg>;
+export const EyeIcon = (p) => (
+  <svg {...base} {...p}>
+    <path d="M4 12.5C7 4.5 17 4.5 20 12.5" strokeWidth="2.2" />
+    <circle cx="12" cy="12.6" r="2.6" fill="currentColor" stroke="none" />
+  </svg>
+);

@@ -1,6 +1,8 @@
 const {
   S3Client, PutObjectCommand, GetObjectCommand, HeadObjectCommand, DeleteObjectCommand,
 } = require('@aws-sdk/client-s3');
+const { Upload } = require('@aws-sdk/lib-storage');
+const fs = require('node:fs');
 
 const client = new S3Client({
   region: process.env.B2_REGION,
@@ -22,9 +24,10 @@ async function uploadFile(key, body, contentType = 'application/pdf') {
 }
 
 // returns a stream, so big files are never loaded fully into memory
-async function getFileStream(key) {
-  const res = await client.send(new GetObjectCommand({ Bucket, Key: key }));
-  return { stream: res.Body, size: res.ContentLength, contentType: res.ContentType };
+// range example: "bytes=0-1048575". Without it you get the whole file.
+async function getFileStream(key, range) {
+  const res = await client.send(new GetObjectCommand({ Bucket, Key: key, ...(range ? { Range: range } : {}) }));
+  return { stream: res.Body, size: res.ContentLength, contentType: res.ContentType, contentRange: res.ContentRange };
 }
 
 async function fileExists(key) {
@@ -41,4 +44,15 @@ async function deleteFile(key) {
   await client.send(new DeleteObjectCommand({ Bucket, Key: key }));
 }
 
-module.exports = { uploadFile, getFileStream, fileExists, deleteFile };
+// streams a big file from disk in parts, so it never sits fully in memory
+async function uploadLarge(key, filePath, contentType = 'application/pdf') {
+  const upload = new Upload({
+    client,
+    params: { Bucket, Key: key, Body: fs.createReadStream(filePath), ContentType: contentType },
+    queueSize: 3,
+    partSize: 8 * 1024 * 1024,
+  });
+  await upload.done();
+}
+
+module.exports = { uploadFile, getFileStream, fileExists, deleteFile, uploadLarge };

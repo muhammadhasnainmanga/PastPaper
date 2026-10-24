@@ -1,7 +1,7 @@
 // Single source of truth for streams, subjects and counts.
 // The Node.js backend can replace this file with an API call later.
 
-export const YEARS = [2026, 2025, 2024, 2023, 2022];
+export const YEARS = [2025, 2024, 2023, 2022, 2021];
 export const YEARS_OF_PAPERS = YEARS.length;
 
 // "Statistics (Optional)" becomes "statistics", used in URLs

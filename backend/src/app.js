@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const { query } = require('./config/db.js');
+const rateLimit = require('express-rate-limit');
 
 const app = express();
 
@@ -8,24 +9,17 @@ app.use(cors({ origin: process.env.CORS_ORIGIN || 'http://localhost:5173' }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// quick check that the server and the database are both alive
-app.get('/api/health', async (req, res) => {
-  try {
-    const { rows } = await query('SELECT current_database() AS db, now() AS time');
-    res.json({ status: 'ok', ...rows[0] });
-  } catch (err) {
-    console.error('Health check failed:', err.message);
-    res.status(503).json({ status: 'error', message: 'Database not reachable' });
-  }
-});
+// at most 200 requests a minute per visitor
+app.use('/api', rateLimit({ windowMs: 60 * 1000, limit: 200, standardHeaders: true, legacyHeaders: false }));
 
-// routes go here later, e.g. app.use('/api/papers', require('./routes/papers.routes.js'));
-
-// anything under /api that did not match above
-app.use('/api', (req, res) => res.status(404).json({ error: 'Not found' }));
-
+app.use('/api/papers', require('./routes/papers.routes.js'));
 // last resort for errors thrown inside routes
+
+//for books
+app.use('/api/books', require('./routes/books.routes.js'));
+
 app.use((err, req, res, next) => {
+  if (err.status) return res.status(err.status).json({ error: err.message });
   console.error(err);
   res.status(500).json({ error: 'Something went wrong' });
 });
