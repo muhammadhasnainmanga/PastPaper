@@ -17,7 +17,8 @@ function parseListQuery(q) {
   if (years.length > 30 || years.some((y) => !Number.isInteger(y) || y < 2000 || y > 2100)) {
     throw new HttpError(400, 'invalid years');
   }
-  return { classLevel, streamSlug: q.stream, subjects, years };
+  const variant = q.original === '1' ? 'original' : 'scanned';
+  return { classLevel, streamSlug: q.stream, subjects, years, variant };
 }
 
 function parseId(id) {

@@ -1,10 +1,10 @@
 const repo = require('../repositories/papers.repository.js');
 
-async function listPapers({ classLevel, streamSlug, subjects, years }) {
+async function listPapers({ classLevel, streamSlug, subjects, years, variant }) {
   const yearList = years.length ? years : await repo.findYears(classLevel);
   if (!yearList.length) return { items: [] };
 
-  const rows = await repo.findGrid({ streamSlug, classLevel, subjects, years: yearList });
+  const rows = await repo.findGrid({ streamSlug, classLevel, subjects, years: yearList, variant });
 
   // one item per subject + year + group, holding up to three files.
   // An empty slot (no paper at all) comes back once, with no group and all files null.

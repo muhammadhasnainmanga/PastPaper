@@ -9,6 +9,7 @@ import { EditIcon, ChevronIcon } from '../components/Icons/Icons.jsx';
 import { CLASSES, STREAMS, YEARS, PAPER_TYPES, slug } from '../data/streams.js';
 import { fetchPapers } from '../api/papers.js';
 import './PaperResults.css';
+import Switch from '../components/Switch/Switch.jsx';
 
 const YEAR_OPTIONS = YEARS.map((y) => ({ value: String(y), label: String(y) }));
 const GROUP_OPTIONS = [{ value: 'subject', label: 'Subject' }, { value: 'year', label: 'Year' }];
@@ -80,7 +81,8 @@ export default function PaperResults() {
   const classLevel = params.get('class');
   const stream = STREAMS.find((s) => s.id === params.get('stream'));
   const valid = Boolean(stream && CLASSES.some((c) => String(c.value) === classLevel));
-
+  const original = params.get('original') === '1';
+  
   const subjectOptions = useMemo(
     () => (valid ? stream.subjects[Number(classLevel)].map((n) => ({ value: slug(n), label: n })) : []),
     [valid, stream, classLevel]
@@ -126,14 +128,14 @@ export default function PaperResults() {
   // data
   const [state, setState] = useState({ status: 'loading', items: [] });
   const [retry, setRetry] = useState(0);
-  const fetchKey = valid ? `${classLevel}|${stream.id}|${subjectsSel.join(',')}|${yearsSel.join(',')}` : '';
+  const fetchKey = valid ? `${classLevel}|${stream.id}|${subjectsSel.join(',')}|${yearsSel.join(',')}|${original ? 1 : 0}` : '';
 
   useEffect(() => {
     if (!valid) return undefined;
     const ctrl = new AbortController();
     // keep the old list on screen (dimmed) while the new one loads
     setState((s) => ({ status: s.items.length ? 'refreshing' : 'loading', items: s.items }));
-    fetchPapers({ classLevel, streamId: stream.id, subjects: subjectsSel, years: yearsSel, signal: ctrl.signal })
+    fetchPapers({ classLevel, streamId: stream.id, subjects: subjectsSel, years: yearsSel, signal: ctrl.signal, original })
       .then((data) => setState({ status: 'ready', items: data.items }))
       .catch((err) => { if (err.name !== 'AbortError') setState({ status: 'error', items: [] }); });
     return () => ctrl.abort();
@@ -203,6 +205,11 @@ export default function PaperResults() {
           <Segmented label="Paper type" options={SHOW_OPTIONS} value={prefs.show}
             onChange={(v) => setPrefs((p) => ({ ...p, show: v }))} />
         </div>
+        <div className="rcontrols__item">
+          <Switch label="Original" checked={original}
+            onChange={(v) => update({ original: v ? ['1'] : [] })}
+            hint="Show the original, unedited PDFs instead of the scanned ones" />
+        </div>
         {groups.length > 1 && (
           <button type="button" className="rcontrols__toggle" onClick={toggleAll}>
             <ChevronIcon width={16} height={16} style={{ transform: allCollapsed ? 'rotate(-90deg)' : 'rotate(180deg)', transition: 'transform .3s' }} />
@@ -210,7 +217,9 @@ export default function PaperResults() {
           </button>
         )}
       </Reveal>
-
+      {state.status === 'ready' && original && state.items.every((it) => Object.values(it.files).every((f) => !f)) && (
+        <p className="rnote">No original PDFs for this selection yet. Switch Original off to see the scanned ones.</p>
+      )}
       <div className={`rgroups${state.status === 'refreshing' ? ' is-refreshing' : ''}`}>
         {state.status === 'loading' && <Skeleton />}
 

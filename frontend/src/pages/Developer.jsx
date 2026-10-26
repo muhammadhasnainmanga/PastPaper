@@ -54,6 +54,9 @@ export default function Developer() {
           {DEV.about.map((p, i) => (
             <Reveal as="p" key={i} delay={120 + i * 100}>{p}</Reveal>
           ))}
+          <Reveal as="a" className="dintrobtn btn btn--dark" href={DEV.profiles[0].url} target="_blank" rel="noopener noreferrer">
+            <Reveal>LinkedIn <Arrow/></Reveal> 
+          </Reveal>
         </div>
         <Reveal variant="fade" delay={200} className="dphoto-wrap"><Photo /></Reveal>
       </div>

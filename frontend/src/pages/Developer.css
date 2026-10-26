@@ -1,6 +1,19 @@
-.container.dev { padding-top: 48px; padding-bottom: 96px; display: flex; flex-direction: column; gap: clamp(56px, 9vw, 96px); }
+.container.dev { 
+    padding-top: 48px; 
+    padding-bottom: 40px; 
+    display: flex; 
+    flex-direction: column; 
+    gap: clamp(56px, 9vw, 96px); }
 
-.dev__title { text-align: center; font-size: clamp(2.3rem, 7.5vw, 4rem); font-weight: 800; letter-spacing: -0.05em; line-height: 1; }
+.dev__title { 
+    text-align: center; 
+    font-size: clamp(2.3rem, 7.5vw, 4rem); 
+    font-weight: 800; 
+    letter-spacing: -0.05em; 
+    line-height: 1;
+    margin-top: 60px;
+    margin-bottom: -28px;
+}
 
 /* intro */
 .dintro { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); gap: clamp(28px, 6vw, 72px); align-items: center; }
@@ -21,6 +34,15 @@
   display: grid; place-items: center; width: 100%; height: 100%;
   font-size: clamp(3rem, 9vw, 5rem); font-weight: 800; letter-spacing: -0.05em; color: var(--green-700); background: var(--green-50);
 }
+
+.dintrobtn{
+    width: 150px;
+    transition:
+    opacity 0.9s var(--ease) var(--d, 0ms),
+    transform 0.9s var(--ease) var(--d, 0ms),
+    scale 1.95s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 
 /* stats */
 .dstats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
@@ -63,7 +85,32 @@
   color: var(--green-700); background: #fff; border: 1px solid var(--line);
   transition: transform 0.25s ease, background 0.2s ease, color 0.2s ease;
 }
-.dlink:hover .dlink__arrow { background: var(--green-700); color: #fff; transform: translate(2px, -2px); }
+.dlink:hover .dlink__arrow { 
+    background: var(--green-700); 
+    color: #fff; transform: 
+    translate(2px, -2px); 
+}
+
+/* ───────── Hovering logic for cards ───────── */
+/* uses the separate "translate" and "scale" properties, so it doesn't fight the reveal animation */
+.dcard.reveal,
+.dstat.reveal {
+  transition:
+    opacity 0.9s var(--ease) var(--d, 0ms),
+    transform 0.9s var(--ease) var(--d, 0ms),
+    translate 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+    scale 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.75s ease;
+}
+
+@media (hover: hover) {
+  .dcard.reveal:hover,
+  .dstat.reveal:hover {
+    translate: 0 -6px;
+    scale: 1.02;
+    box-shadow: 0 26px 46px -18px rgba(25, 70, 50, 0.32), 0 0 0 1px rgba(63, 174, 125, 0.28);
+  }
+}
 
 @media (max-width: 900px) {
   .dcards { grid-template-columns: 1fr; }

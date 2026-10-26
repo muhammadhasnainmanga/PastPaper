@@ -11,11 +11,11 @@ export const slug = (name) =>
 const MEDICAL_11 = ['Botany', 'Zoology', 'Physics', 'Chemistry', 'Urdu', 'English', 'Islamiyat'];
 const MEDICAL_12 = ['Botany', 'Zoology', 'Physics', 'Chemistry', 'Urdu', 'English', 'Pakistan Studies'];
 
-const CS_11 = ['Physics', 'Statistics (Optional)', 'Maths', 'Urdu', 'English', 'Computer Science', 'Islamiyat'];
-const CS_12 = ['Physics', 'Statistics (Optional)', 'Maths', 'Urdu', 'English', 'Computer Science', 'Pakistan Studies'];
+const CS_11 = ['Physics', 'Maths', 'Urdu', 'English', 'Computer Science', 'Islamiyat'];
+const CS_12 = ['Physics', 'Maths', 'Urdu', 'English', 'Computer Science', 'Pakistan Studies'];
 
-const ENG_11 = ['Physics', 'Chemistry', 'Statistics (Optional)', 'Maths', 'Urdu', 'English', 'Islamiyat'];
-const ENG_12 = ['Physics', 'Chemistry', 'Statistics (Optional)', 'Maths', 'Urdu', 'English', 'Pakistan Studies'];
+const ENG_11 = ['Physics', 'Chemistry', 'Maths', 'Urdu', 'English', 'Islamiyat'];
+const ENG_12 = ['Physics', 'Chemistry', 'Maths', 'Urdu', 'English', 'Pakistan Studies'];
 
 export const STREAMS = [
   { id: 'pre-medical', name: 'Pre-Medical', icon: 'medical', subjects: { 11: MEDICAL_11, 12: MEDICAL_12 } },

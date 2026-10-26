@@ -1,0 +1,14 @@
+.switch {
+  display: inline-flex; align-items: center; gap: 12px; min-height: 48px; padding: 0 10px 0 16px; border-radius: 16px;
+  font-size: 0.86rem; font-weight: 600; color: var(--ink-soft);
+  background: rgba(255, 255, 255, 0.7); border: 1px solid var(--line);
+  transition: border-color 0.25s ease, color 0.25s ease;
+}
+.switch.is-on { color: var(--ink); border-color: rgba(63, 174, 125, 0.55); }
+.switch__track { position: relative; width: 44px; height: 26px; border-radius: 999px; background: rgba(21, 51, 42, 0.18); transition: background 0.3s ease; }
+.switch.is-on .switch__track { background: var(--green-600); }
+.switch__knob {
+  position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff;
+  box-shadow: 0 2px 6px rgba(21, 51, 42, 0.3); transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.switch.is-on .switch__knob { transform: translateX(18px); }

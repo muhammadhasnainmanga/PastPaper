@@ -34,11 +34,12 @@ const API_BASE = '/api'; // later: import.meta.env.VITE_API_URL
  4) GET /api/papers/zip?ids=a,b,c  ZIP of several files, for the "download all" button.
 */
 
-export async function fetchPapers({ classLevel, streamId, subjects, years, signal }) {
+export async function fetchPapers({ classLevel, streamId, subjects, years, signal, original }) {
   if (SERVER_READY) {
     const qs = new URLSearchParams({ class: classLevel, stream: streamId });
     if (subjects.length) qs.set('subjects', subjects.join(','));
     if (years.length) qs.set('years', years.join(','));
+    if (original) qs.set('original', '1');
     const res = await fetch(`${API_BASE}/papers?${qs}`, { signal });
     if (!res.ok) throw new Error(`Papers request failed (${res.status})`);
     return res.json();

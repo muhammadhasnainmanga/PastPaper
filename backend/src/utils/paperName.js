@@ -6,4 +6,9 @@ function downloadName(p) {
   return `${subject}-${TYPE_LABEL[p.type]}-${p.year}-Class${p.class_level}.pdf`;
 }
 
-module.exports = { downloadName };
+const withVariant = (fn) => (p) => {
+  const name = fn(p);
+  return p.variant === 'original' ? name.replace(/\.pdf$/, '-Original.pdf') : name;
+};
+
+module.exports = { downloadName: withVariant(downloadName) };

@@ -6,7 +6,10 @@ const { pool, query } = require('../config/db.js');
 const { uploadFile, fileExists } = require('../services/storage.js');
 
 const apply = process.argv.includes('--apply');
-const DIR = path.join(__dirname, '../../../papers-data');
+const vi = process.argv.indexOf('--variant');
+const VARIANT = vi > -1 ? process.argv[vi + 1] : 'scanned';
+if (!['scanned', 'original'].includes(VARIANT)) { console.error('--variant must be scanned or original'); process.exit(1); }
+const DIR = path.join(__dirname, '../../../', VARIANT === 'original' ? 'papers-data-original' : 'papers-data');
 // 11_physics_2025_objective.pdf   or   11_english_2025_science-general_objective.pdf
 const NAME = /^(11|12)_([a-z-]+)_(\d{4})_(?:([a-z-]+)_)?(subjective|objective|full)\.pdf$/;
 const MAX_BYTES = 15 * 1024 * 1024;
@@ -27,8 +30,10 @@ async function main() {
   const groupId = new Map(groupRows.map((g) => [g.slug, g.id]));
 
   const { rows: existing } = await query(
-    'SELECT subject_id, class_level, year, type, group_id, size_bytes FROM papers'
+    'SELECT subject_id, class_level, year, type, group_id, size_bytes FROM papers WHERE variant = $1',
+    [VARIANT]
   );
+
   const have = new Map(existing.map((r) =>
     [`${r.class_level}:${r.subject_id}:${r.year}:${r.type}:${r.group_id ?? 0}`, r.size_bytes]));
 
@@ -59,7 +64,8 @@ async function main() {
 
     const id = subjectId.get(subject);
     const gid = group ? groupId.get(group) : null;
-    const key = group ? `${cls}/${subject}/${year}/${group}/${type}.pdf` : `${cls}/${subject}/${year}/${type}.pdf`;
+    const prefix = VARIANT === 'original' ? 'original/' : '';
+    const key = `${prefix}${group ? `${cls}/${subject}/${year}/${group}/${type}.pdf` : `${cls}/${subject}/${year}/${type}.pdf`}`;
     const previous = have.get(`${cls}:${id}:${year}:${type}:${gid ?? 0}`);
     const status = previous === undefined ? 'new' : previous === size ? 'unchanged' : 'changed';
     items.push({ file, full, cls: Number(cls), subject, id, year: Number(year), type, group: group || null, gid, size, key, status });
@@ -100,9 +106,9 @@ async function main() {
 
   // upload to Backblaze first, then write the row, so the site never lists a file that is not there
   const UPSERT = `
-    INSERT INTO papers (subject_id, class_level, year, type, storage_key, size_bytes, group_id)
-    VALUES ($1, $2, $3, $4, $5, $6, $7)
-    ON CONFLICT (class_level, subject_id, year, type, COALESCE(group_id, 0))
+    INSERT INTO papers (subject_id, class_level, year, type, storage_key, size_bytes, group_id, variant)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+    ON CONFLICT (class_level, subject_id, year, type, COALESCE(group_id, 0), variant)
     DO UPDATE SET storage_key = EXCLUDED.storage_key,
                   size_bytes  = EXCLUDED.size_bytes,
                   updated_at  = now()
@@ -113,7 +119,7 @@ async function main() {
     try {
       if (i.status === 'unchanged' && (await fileExists(i.key))) { done.skipped += 1; continue; }
       await uploadFile(i.key, fs.readFileSync(i.full));
-      const { rows } = await query(UPSERT, [i.id, i.cls, i.year, i.type, i.key, i.size, i.gid]);
+      const { rows } = await query(UPSERT, [i.id, i.cls, i.year, i.type, i.key, i.size, i.gid, VARIANT]);
       if (rows[0].inserted) done.added += 1; else done.replaced += 1;
       console.log(`  done  ${i.key}`);
     } catch (err) {
