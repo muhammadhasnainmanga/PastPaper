@@ -11,7 +11,8 @@
     "start": "nodemon src/server.js",
     "test:storage": "node src/scripts/test-storage.js",
     "upload:papers": "node src/scripts/upload-paper.js",
-    "upload:books": "node src/scripts/upload-books.js"
+    "upload:books": "node src/scripts/upload-books.js",
+    "import:quiz": "node src/scripts/import-quiz.js"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1147.0",

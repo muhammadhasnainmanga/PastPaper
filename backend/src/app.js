@@ -18,10 +18,15 @@ app.use('/api/papers', require('./routes/papers.routes.js'));
 //for books
 app.use('/api/books', require('./routes/books.routes.js'));
 
+//for quiz
+app.use('/api/quiz', require('./routes/quiz.routes.js'));
+
 app.use((err, req, res, next) => {
   if (err.status) return res.status(err.status).json({ error: err.message });
   console.error(err);
   res.status(500).json({ error: 'Something went wrong' });
 });
+
+
 
 module.exports = app;

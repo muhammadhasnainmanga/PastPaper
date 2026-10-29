@@ -7,6 +7,7 @@ import { CheckIcon, CloseIcon, ChevronIcon } from '../components/Icons/Icons.jsx
 import { fetchQuestions } from '../api/quiz.js';
 import { CLASSES } from '../data/streams.js';
 import './QuizPlay.css';
+import RichText from '../components/RichText/RichText.jsx';
 
 const SLUG = /^[a-z]+(?:-[a-z]+)*$/;
 const LETTERS = 'ABCDEF';
@@ -201,7 +202,7 @@ export default function QuizPlay() {
 
       <article className="qcard glass" key={q.id}>
         <QuestionTags q={q} />
-        <h1 className="qbody">{q.body}</h1>
+        <h1 className="qbody"><RichText text={q.body} /></h1>
         {q.image && <img className="qimg" src={q.image} alt="" loading="lazy" />}
 
         <div className="qopts" role="group" aria-label="Answer options">
@@ -216,7 +217,7 @@ export default function QuizPlay() {
                 <span className="qopt__key">
                   {right ? <CheckIcon width={16} height={16} strokeWidth={3} /> : wrong ? <CloseIcon width={16} height={16} strokeWidth={3} /> : LETTERS[i]}
                 </span>
-                <span className="qopt__text">{text}</span>
+                <span className="qopt__text"><RichText text={text} /></span>
               </button>
             );
           })}
@@ -225,7 +226,7 @@ export default function QuizPlay() {
         {isChecked && (
           <div className={`qexp${chosen === q.correct ? ' is-right' : ' is-wrong'}`} role="status">
             <strong>{chosen === q.correct ? 'Correct.' : `Not quite. The right answer is ${LETTERS[q.correct]}.`}</strong>
-            {q.explanation && <p>{q.explanation}</p>}
+            {q.explanation && <p><RichText text={q.explanation} /></p>}
           </div>
         )}
 

@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Reveal from '../components/Reveal/Reveal.jsx';
 import Segmented from '../components/Segmented/Segmented.jsx';
+import RichText from '../components/RichText/RichText.jsx';
 
 const LETTERS = 'ABCDEF';
 
@@ -62,7 +63,7 @@ export default function QuizResults({ questions, answers, subjectName, classLeve
                 {x.group && <span className="qtag qtag--group" title={x.group.name}>{x.group.short}</span>}
                 {mine === undefined && <span className="qtag qtag--bad">Skipped</span>}
               </div>
-              <h2 className="qbody">{x.body}</h2>
+              <h2 className="qbody"><RichText text={x.body} /></h2>
               {x.image && <img className="qimg" src={x.image} alt="" loading="lazy" />}
               <div className="qopts">
                 {x.options.map((text, k) => {
@@ -71,14 +72,14 @@ export default function QuizResults({ questions, answers, subjectName, classLeve
                   return (
                     <div key={k} className={`qopt qopt--static${right ? ' is-right' : ''}${wrong ? ' is-wrong' : ''}`}>
                       <span className="qopt__key">{LETTERS[k]}</span>
-                      <span className="qopt__text">{text}</span>
+                      <span className="qopt__text"><RichText text={text} /></span>
                       {mine === k && <span className="qopt__tag">Your answer</span>}
                       {right && <span className="qopt__tag">Correct</span>}
                     </div>
                   );
                 })}
               </div>
-              {x.explanation && <div className="qexp"><p>{x.explanation}</p></div>}
+              {x.explanation && <div className="qexp"><p><RichText text={x.explanation} /></p></div>}
             </Reveal>
           );
         })}

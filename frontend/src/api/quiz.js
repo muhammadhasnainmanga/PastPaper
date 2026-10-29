@@ -1,7 +1,7 @@
 import { STREAMS, YEARS, slug } from '../data/streams.js';
 
 // false = fake quiz data made here, true = real calls to your Node.js server
-export const QUIZ_SERVER_READY = false;
+export const QUIZ_SERVER_READY = true;
 const API_BASE = '/api';
 
 /*

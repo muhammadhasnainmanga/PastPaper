@@ -173,6 +173,10 @@
   flex: 1;
   min-width: 0;
   line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+.qopt__text .katex {
+  font-size: 1.08em;
 }
 .qopt__tag {
   flex: none;
