@@ -13,3 +13,4 @@ export const EyeIcon = (p) => (
     <circle cx="12" cy="12.6" r="2.6" fill="currentColor" stroke="none" />
   </svg>
 );
+export const CheckIcon = (p) => <svg {...base} {...p}><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>;

@@ -6,6 +6,7 @@ const LINKS = [
   { to: '/', label: 'Home', end: true },
   { to: '/papers', label: 'Past Papers' },
   { to: '/books', label: 'Books'},
+  { to: '/quiz', label: 'Quiz' },
   { to: '/developer', label: 'Developer' }
 ];
 

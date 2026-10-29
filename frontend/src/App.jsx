@@ -8,6 +8,8 @@ import PastPapers from './pages/PastPapers.jsx';
 import PaperResults from './pages/PaperResults.jsx';
 import Developer from './pages/Developer.jsx';
 import Books from './pages/Books.jsx';
+import Quiz from './pages/Quiz.jsx';
+import QuizPlay from './pages/QuizPlay.jsx';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -30,6 +32,8 @@ export default function App() {
             <Route path="/papers/results" element={<PaperResults />} />
             <Route path="/developer" element={<Developer />} />
             <Route path="/books" element={<Books />} />
+            <Route path="/quiz" element={<Quiz />} />
+            <Route path="/quiz/play" element={<QuizPlay />} />
           </Routes>
         </main>
         <Footer />
