@@ -5,9 +5,9 @@ import './Navbar.css';
 const LINKS = [
   { to: '/', label: 'Home', end: true },
   { to: '/papers', label: 'Past Papers' },
-  { to: '/books', label: 'Books'},
+  { to: '/books', label: 'Books' },
   { to: '/quiz', label: 'Quiz' },
-  { to: '/developer', label: 'Developer' }
+  { to: '/developer', label: 'Developer' },
 ];
 
 export default function Navbar() {
@@ -32,11 +32,6 @@ export default function Navbar() {
           ))}
         </nav>
 
-        {/* <div className="nav__classes">
-          <Link to="/papers?class=11">Class 11</Link>
-          <Link to="/papers?class=12">Class 12</Link>
-        </div> */}
-
         <button
           type="button"
           className={`nav__menu${open ? ' is-open' : ''}`}
@@ -53,10 +48,6 @@ export default function Navbar() {
           {LINKS.map((l) => (
             <NavLink key={l.to} to={l.to} end={l.end} className={linkClass}>{l.label}</NavLink>
           ))}
-          <div className="nav__sheet-classes">
-            <Link to="/papers?class=11">Class 11</Link>
-            <Link to="/papers?class=12">Class 12</Link>
-          </div>
         </div>
       )}
     </header>

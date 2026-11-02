@@ -1,7 +1,7 @@
 export const DEV = {
   name: 'Hasnain',
   initials: 'YN',
-  photo: '../../public/developer.jpeg',
+  photo: '../../developer.jpeg',
   about: [
     'I myself is a Sindh Board student and saw an actual gap for a website like this with all past papers, books and mcqs with perfect UI and UX experience.',
     'I like problem solving, developing stuff for the community. Further interest include Competitve Programming, Electronics, Chess, Editing, Psychology and Human Behaviour, Sketching, Cinema, Aviation, Reading Fiction and Physical Sports.',

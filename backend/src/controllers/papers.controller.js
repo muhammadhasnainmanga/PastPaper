@@ -5,7 +5,7 @@ const { downloadName } = require('../utils/paperName.js');
 const { parseListQuery, parseId, parseIds } = require('../validators/papers.validator.js');
 const repo = require('../repositories/papers.repository.js');
 const service = require('../services/papers.service.js');
-const { getFileStream } = require('../services/storage.js');
+const { getFileStream, getSignedFileUrl } = require('../services/storage.js');
 
 async function list(req, res, next) {
   try {
@@ -21,26 +21,10 @@ async function sendFile(req, res, next, disposition) {
   try {
     const paper = await repo.findFileById(parseId(req.params.id));
     if (!paper) throw new HttpError(404, 'Paper not found');
-
-    let file;
-    try {
-      file = await getFileStream(paper.storage_key);
-    } catch (err) {
-      if (err.name === 'NoSuchKey') throw new HttpError(404, 'File is missing from storage');
-      throw err;
-    }
-
-    res.setHeader('Content-Type', 'application/pdf');
-    if (file.size) res.setHeader('Content-Length', file.size);
-    res.setHeader('Content-Disposition', `${disposition}; filename="${downloadName(paper)}"`);
-    res.setHeader('Cache-Control', 'public, max-age=3600');
-    res.setHeader('X-Content-Type-Options', 'nosniff');
-
-    await pipeline(file.stream, res); // streams the file, never loads it all into memory
-    // later: this is where a download counter can go
+    const url = await getSignedFileUrl(paper.storage_key, { disposition, filename: downloadName(paper) });
+    res.setHeader('Cache-Control', 'no-store');
+    res.redirect(302, url);
   } catch (err) {
-    if (err.code === 'ERR_STREAM_PREMATURE_CLOSE') return; // the visitor closed the tab midway
-    if (res.headersSent) return res.destroy();
     next(err);
   }
 }

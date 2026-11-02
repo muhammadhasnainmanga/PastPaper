@@ -2,27 +2,10 @@ const { pipeline } = require('node:stream/promises');
 const HttpError = require('../utils/HttpError.js');
 const { parseId } = require('../validators/papers.validator.js');
 const repo = require('../repositories/books.repository.js');
-const { getFileStream } = require('../services/storage.js');
+const { getFileStream, getSignedFileUrl } = require('../services/storage.js');
 
 const clean = (s) => s.replace(/[^A-Za-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const bookFileName = (b) => `${clean(b.title)}-Class${b.class_level}-Book.pdf`; // Physics-Class11-Book.pdf
-
-// "bytes=0-99", "bytes=500-" or "bytes=-100". Returns null (no range), 'invalid', or { start, end }.
-function parseRange(header, total) {
-  const m = /^bytes=(\d*)-(\d*)$/.exec(header || '');
-  if (!m || (m[1] === '' && m[2] === '')) return null;
-  let start;
-  let end;
-  if (m[1] === '') {
-    start = Math.max(total - Number(m[2]), 0);
-    end = total - 1;
-  } else {
-    start = Number(m[1]);
-    end = m[2] === '' ? total - 1 : Math.min(Number(m[2]), total - 1);
-  }
-  if (start > end || start >= total) return 'invalid';
-  return { start, end };
-}
 
 function fail(err, res, next) {
   if (err.code === 'ERR_STREAM_PREMATURE_CLOSE') return; // the visitor closed the tab midway
@@ -55,38 +38,11 @@ async function sendBook(req, res, next, disposition) {
   try {
     const book = await repo.findById(parseId(req.params.id));
     if (!book) throw new HttpError(404, 'Book not found');
-
-    const total = Number(book.size_bytes);
-    const range = parseRange(req.headers.range, total);
-    if (range === 'invalid') {
-      res.setHeader('Content-Range', `bytes */${total}`);
-      throw new HttpError(416, 'Range not satisfiable');
-    }
-
-    let file;
-    try {
-      file = await getFileStream(book.storage_key, range ? `bytes=${range.start}-${range.end}` : undefined);
-    } catch (err) {
-      if (err.name === 'NoSuchKey') throw new HttpError(404, 'File is missing from storage');
-      throw err;
-    }
-
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Accept-Ranges', 'bytes');
-    res.setHeader('Content-Disposition', `${disposition}; filename="${bookFileName(book)}"`);
-    res.setHeader('Cache-Control', 'public, max-age=3600');
-    res.setHeader('X-Content-Type-Options', 'nosniff');
-    if (range) {
-      res.status(206);
-      res.setHeader('Content-Range', `bytes ${range.start}-${range.end}/${total}`);
-      res.setHeader('Content-Length', range.end - range.start + 1);
-    } else {
-      res.setHeader('Content-Length', file.size || total);
-    }
-
-    await pipeline(file.stream, res); // streams the file, never loads it all into memory
+    const url = await getSignedFileUrl(book.storage_key, { disposition, filename: bookFileName(book) });
+    res.setHeader('Cache-Control', 'no-store');
+    res.redirect(302, url);
   } catch (err) {
-    fail(err, res, next);
+    next(err);
   }
 }
 

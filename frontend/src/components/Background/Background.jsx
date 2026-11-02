@@ -24,7 +24,7 @@ export default function Background() {
     let tx = gx, ty = gy, active = false, fade = 1;
 
     const makeDots = () => {
-      const count = Math.max(34, Math.min(120, Math.round((w * h) / 17000)));
+      const count = Math.max(34, Math.min(70, Math.round((w * h) / 26000)))
       dots = Array.from({ length: count }, () => ({
         x: Math.random() * w,
         y: Math.random() * h,
@@ -79,7 +79,7 @@ export default function Background() {
     };
 
     const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
       const nw = window.innerWidth;
       const nh = window.innerHeight;
       const widthChanged = nw !== w;
