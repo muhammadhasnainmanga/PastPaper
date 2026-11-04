@@ -1,9 +1,9 @@
 import { STREAMS, slug } from '../data/streams.js';
 import { toast } from '../components/Toast/Toast.jsx';
+import { API_BASE } from './config.js';
 
 // false = fake books made here, true = real calls to your Node.js server
 export const BOOKS_SERVER_READY = true;
-const API_BASE = import.meta.env.VITE_API_URL;
 
 export async function fetchBooks({ classLevel, signal }) {
   if (BOOKS_SERVER_READY) {
