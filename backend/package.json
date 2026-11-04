@@ -8,7 +8,7 @@
   "license": "ISC",
   "type": "commonjs",
   "scripts": {
-    "start": "nodemon src/server.js",
+    "start": "node src/server.js",
     "test:storage": "node src/scripts/test-storage.js",
     "upload:papers": "node src/scripts/upload-paper.js",
     "upload:books": "node src/scripts/upload-books.js",
