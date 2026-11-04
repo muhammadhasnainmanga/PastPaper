@@ -27,12 +27,16 @@ jobs:
         with:
           node-version: '24.x'
 
-      - name: Install Production dependencies
-        run: npm ci --omit=dev
+      - name: Install dependencies
+        run: npm ci
         working-directory: ./backend
 
       - name: Run tests
         run: npm run test --if-present
+        working-directory: ./backend
+
+      - name: Remove local dependencies
+        run: rm -rf node_modules
         working-directory: ./backend
 
       - name: Login to Azure
