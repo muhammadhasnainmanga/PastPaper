@@ -9,7 +9,16 @@ export async function fetchBooks({ classLevel, signal }) {
   if (BOOKS_SERVER_READY) {
     const res = await fetch(`${API_BASE}/books?class=${classLevel}`, { signal });
     if (!res.ok) throw new Error(`Books request failed (${res.status})`);
-    return res.json();
+    const data = await res.json();
+    return {
+      ...data,
+      items: data.items.map((book) => ({
+        ...book,
+        // The API returns a root-relative path, which would resolve against
+        // the Cloudflare frontend host. Resolve it against the Azure API host.
+        cover: book.cover ? new URL(book.cover, API_BASE).toString() : null,
+      })),
+    };
   }
   return mockBooks({ classLevel, signal });
 }
