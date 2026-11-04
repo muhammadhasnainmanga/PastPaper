@@ -5,7 +5,9 @@ const rateLimit = require('express-rate-limit');
 
 const app = express();
 
-app.use(cors({ origin: process.env.CORS_ORIGIN || 'http://localhost:5173' }));
+const origins = (process.env.CORS_ORIGIN || 'http://localhost:5173').split(',').map((s) => s.trim());
+app.use(cors({ origin: origins }));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 

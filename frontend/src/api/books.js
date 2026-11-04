@@ -3,18 +3,7 @@ import { toast } from '../components/Toast/Toast.jsx';
 
 // false = fake books made here, true = real calls to your Node.js server
 export const BOOKS_SERVER_READY = true;
-const API_BASE = '/api';
-
-/*
- ─────────── BACKEND CONTRACT (later) ───────────
- SQL:  books(id, class_level, title, sort_order, storage_key, cover_key, size_bytes, is_active)
-
- GET /api/books?class=11
-   -> { items: [ { id, title, classLevel: 11, size: 18400000, cover: '/api/books/<id>/cover' | null } ] }
- GET /api/books/:id/file      open the PDF in the browser (Content-Disposition: inline)
- GET /api/books/:id/download  save the PDF (Content-Disposition: attachment)
- GET /api/books/:id/cover     the cover image
-*/
+const API_BASE = '/api' || import.meta.env.VITE_API_URL;
 
 export async function fetchBooks({ classLevel, signal }) {
   if (BOOKS_SERVER_READY) {

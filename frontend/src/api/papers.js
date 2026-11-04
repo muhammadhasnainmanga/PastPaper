@@ -5,34 +5,7 @@ import { toast } from '../components/Toast/Toast.jsx';
 // false = fake data generated here so you can build the UI.
 // true  = real calls to your Node.js server.
 export const SERVER_READY = true;
-const API_BASE = '/api'; // later: import.meta.env.VITE_API_URL
-
-/*
- ─────────── BACKEND CONTRACT (Node.js + SQL + Cloudinary) ───────────
-
- SQL (one row per PDF):
-   papers(id, class, subject_slug, year, type, storage_key, size_bytes)
-   type = 'subjective' | 'objective' | 'full'.
-   Stream is not stored: a Physics paper is the same for every stream.
-
- 1) GET /api/papers?class=11&stream=pre-medical&subjects=physics,chemistry&years=2026,2025
-    - subjects / years missing or empty = all of them.
-    - Response:
-    { items: [ { subject: 'physics', year: 2026,
-        files: { subjective: { id: 'abc', size: 2411724 }, objective: { id: 'def', size: 880000 }, full: null } 
-      } ] 
-    }
-
- 2) GET /api/papers/:id/file      open in the browser
-    Look up the row, get the PDF from Cloudinary, stream it with
-      Content-Type: application/pdf
-      Content-Disposition: inline; filename="Physics-Objective-2026-Class11.pdf"
-
- 3) GET /api/papers/:id/download   same, but Content-Disposition: attachment
-    (a server header is the only reliable way to force a download)
-
- 4) GET /api/papers/zip?ids=a,b,c  ZIP of several files, for the "download all" button.
-*/
+const API_BASE = '/api' || import.meta.env.VITE_API_URL;  
 
 export async function fetchPapers({ classLevel, streamId, subjects, years, signal, original }) {
   if (SERVER_READY) {

@@ -2,20 +2,7 @@ import { STREAMS, YEARS, slug } from '../data/streams.js';
 
 // false = fake quiz data made here, true = real calls to your Node.js server
 export const QUIZ_SERVER_READY = true;
-const API_BASE = '/api';
-
-/*
- ─────────── BACKEND CONTRACT (later) ───────────
- GET /api/quiz/subjects?class=11
-   -> { items: [ { slug: 'physics', name: 'Physics' } ] }          only subjects with a live quiz
- GET /api/quiz/sets?class=11&subject=physics
-   -> { items: [ { year: 2025, count: 15 } ] }                      newest year first
- GET /api/quiz/questions?class=11&subject=physics&years=2025,2024   (years missing = all)
-   -> { subject: { slug, name },
-        items: [ { id, year, number, group: { short, name } | null,
-                   body, image: '/api/...' | null, options: ['..'], correct: 1, explanation: '..' | null } ] }
-   items are ordered by year (newest first), then by position. Only active sets and questions.
-*/
+const API_BASE = '/api' || import.meta.env.VITE_API_URL;
 
 async function get(path, signal) {
   const res = await fetch(`${API_BASE}${path}`, { signal });
