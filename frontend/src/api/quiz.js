@@ -2,7 +2,7 @@ import { STREAMS, YEARS, slug } from '../data/streams.js';
 
 // false = fake quiz data made here, true = real calls to your Node.js server
 export const QUIZ_SERVER_READY = true;
-const API_BASE = '/api' || import.meta.env.VITE_API_URL;
+const API_BASE = import.meta.env.VITE_API_URL;
 
 async function get(path, signal) {
   const res = await fetch(`${API_BASE}${path}`, { signal });

@@ -5,7 +5,7 @@ import { toast } from '../components/Toast/Toast.jsx';
 // false = fake data generated here so you can build the UI.
 // true  = real calls to your Node.js server.
 export const SERVER_READY = true;
-const API_BASE = '/api' || import.meta.env.VITE_API_URL;  
+const API_BASE = import.meta.env.VITE_API_URL;  
 
 export async function fetchPapers({ classLevel, streamId, subjects, years, signal, original }) {
   if (SERVER_READY) {
