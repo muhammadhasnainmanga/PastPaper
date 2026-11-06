@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://pastpaper.hasnainmanga.dev/sitemap.xml
