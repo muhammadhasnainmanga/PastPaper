@@ -4,6 +4,7 @@ import ClassToggle from '../components/ClassToggle/ClassToggle.jsx';
 import BookCard from '../components/BookCard/BookCard.jsx';
 import Toast from '../components/Toast/Toast.jsx';
 import { fetchBooks } from '../api/books.js';
+import { useSeo } from '../hooks/useSeo.js';
 import './Books.css';
 
 const CLASS_KEY = 'pastpaper:books-class';
@@ -27,6 +28,12 @@ function Skeleton() {
 }
 
 export default function Books() {
+  useSeo({
+    title: 'Sindh Board Class 11 & 12 Books: Free PDF Download | PastPaper',
+    description: 'Free downloadable Sindh Board textbooks for Class 11 and Class 12, ready to read or download.',
+    path: '/books',
+  });
+
   const [classLevel, setClassLevel] = useState(startClass);
   const [state, setState] = useState({ status: 'loading', items: [] });
   const [retry, setRetry] = useState(0);

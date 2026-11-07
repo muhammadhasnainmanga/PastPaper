@@ -4,6 +4,7 @@ import { useReveal } from '../hooks/useReveal.js';
 import { useCountUp } from '../hooks/useCountUp.js';
 import { DEV } from '../data/developer.js';
 import './Developer.css';
+import { useSeo } from '../hooks/useSeo.js';
 
 const Arrow = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4"
@@ -42,6 +43,12 @@ function SectionHead({ label, title }) {
 }
 
 export default function Developer() {
+  useSeo({
+    title: 'About the Developer | PastPaper',
+    description: 'The developer behind PastPaper, a free project for the Sindh Board community.',
+    path: '/developer',
+  });
+
   return (
     <section className="container dev">
       <h1 className="dev__title">

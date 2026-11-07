@@ -4,6 +4,7 @@ import Select from '../components/Select/Select.jsx';
 import { CLASSES } from '../data/streams.js';
 import { fetchSubjects, fetchSets } from '../api/quiz.js';
 import '../components/PaperFinder/PaperFinder.css';
+import { useSeo } from '../hooks/useSeo.js';
 
 const CLASS_OPTIONS = CLASSES.map((c) => ({ value: String(c.value), label: c.label }));
 const MODE_OPTIONS = [{ value: 'friendly', label: 'Friendly mode' }, { value: 'exam', label: 'Exam mode' }];
@@ -23,6 +24,12 @@ function fallbackClass() {
 const yearsText = (v) => (!v.length ? 'All years' : v.length <= 3 ? v.join(', ') : `${v.length} years`);
 
 export default function Quiz() {
+  useSeo({
+    title: 'Sindh Board MCQ Practice: Class 11 & 12 Objective Questions | PastPaper',
+    description: 'Practice objective questions from Sindh Board past papers with instant feedback or exam mode.',
+    path: '/quiz',
+  });
+
   const navigate = useNavigate();
   const [saved] = useState(load);
   const [classLevel, setClassLevel] = useState(() => (CLASS_OPTIONS.some((o) => o.value === saved.class) ? saved.class : fallbackClass()));

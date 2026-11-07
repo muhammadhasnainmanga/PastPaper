@@ -10,6 +10,7 @@ import { CLASSES, STREAMS, YEARS, PAPER_TYPES, slug } from "../data/streams.js";
 import { fetchPapers } from "../api/papers.js";
 import "./PaperResults.css";
 import Switch from "../components/Switch/Switch.jsx";
+import { useSeo } from "../hooks/useSeo.js";
 
 const YEAR_OPTIONS = YEARS.map((y) => ({ value: String(y), label: String(y) }));
 const GROUP_OPTIONS = [
@@ -97,6 +98,13 @@ function Skeleton() {
 }
 
 export default function PaperResults() {
+  useSeo({
+    title: "Past papers | PastPaper",
+    description: "Past papers for your selection.",
+    path: "/papers",
+    noindex: true,
+  });
+
   const [params, setParams] = useSearchParams();
   const classLevel = params.get("class");
   const stream = STREAMS.find((s) => s.id === params.get("stream"));
