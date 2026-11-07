@@ -16,6 +16,8 @@ app.use(cors({ origin: origins }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+app.get('/api/debug-ip', (req, res) => res.json({ ip: req.ip, xff: req.headers['x-forwarded-for'] }));
+
 // at most 200 requests a minute per visitor
 app.use('/api', rateLimit({ windowMs: 60 * 1000, limit: 200, standardHeaders: true, legacyHeaders: false }));
 
