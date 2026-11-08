@@ -8,6 +8,9 @@ const app = express();
 const configuredOrigins = (process.env.CORS_ORIGIN || '').split(',').map((s) => s.trim()).filter(Boolean);
 const origins = [...new Set([
   'http://localhost:5173',
+  'http://127.0.0.1:5173',
+  'http://localhost:4173',
+  'http://127.0.0.1:4173',
   'https://pastpaper.hasnainmanga.dev',
   ...configuredOrigins,
 ])];
