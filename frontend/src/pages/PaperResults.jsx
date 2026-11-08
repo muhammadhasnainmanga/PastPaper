@@ -13,27 +13,21 @@ import Switch from "../components/Switch/Switch.jsx";
 import { useSeo } from "../hooks/useSeo.js";
 
 const YEAR_OPTIONS = YEARS.map((y) => ({ value: String(y), label: String(y) }));
-const GROUP_OPTIONS = [
-  { value: "subject", label: "Subject" },
-  { value: "year", label: "Year" },
-];
+
 const SHOW_OPTIONS = PAPER_TYPES.map((t) => ({ value: t.key, label: t.label }));
 
 const PREFS_KEY = "pastpaper:prefs";
+
 function loadPrefs() {
-  const base = { groupBy: "subject", show: "full" };
   try {
     const saved = JSON.parse(localStorage.getItem(PREFS_KEY)) || {};
     return {
-      groupBy: GROUP_OPTIONS.some((o) => o.value === saved.groupBy)
-        ? saved.groupBy
-        : base.groupBy,
       show: SHOW_OPTIONS.some((o) => o.value === saved.show)
         ? saved.show
-        : base.show,
+        : "full",
     };
   } catch {
-    return base;
+    return { show: "full" };
   }
 }
 
@@ -124,15 +118,12 @@ export default function PaperResults() {
     [valid, stream, classLevel],
   );
 
-  const subjectsRaw = params.get("subjects") || "";
+  const subjectParam =
+    params.get("subject") || (params.get("subjects") || "").split(",")[0];
+  const subject = subjectOptions.find((o) => o.value === subjectParam) || null;
+  const ok = valid && Boolean(subject); // class, stream and subject are all good
+
   const yearsRaw = params.get("years") || "";
-  const subjectsSel = useMemo(
-    () =>
-      subjectOptions
-        .map((o) => o.value)
-        .filter((v) => subjectsRaw.split(",").includes(v)),
-    [subjectOptions, subjectsRaw],
-  );
   const yearsSel = useMemo(
     () =>
       YEAR_OPTIONS.map((o) => o.value).filter((v) =>
@@ -163,31 +154,29 @@ export default function PaperResults() {
 
   // keep the finder in sync with what the student last viewed
   useEffect(() => {
-    if (!valid) return;
+    if (!ok) return;
     try {
       localStorage.setItem(
         "pastpaper:last",
         JSON.stringify({
           class: classLevel,
           stream: stream.id,
-          subjects: subjectsSel,
+          subject: subject.value,
           years: yearsSel,
         }),
       );
     } catch {
       /* storage blocked, ignore */
     }
-  }, [valid, classLevel, stream, subjectsSel, yearsSel]);
+  }, [ok, classLevel, stream, subject, yearsSel]);
 
   // data
   const [state, setState] = useState({ status: "loading", items: [] });
   const [retry, setRetry] = useState(0);
-  const fetchKey = valid
-    ? `${classLevel}|${stream.id}|${subjectsSel.join(",")}|${yearsSel.join(",")}|${original ? 1 : 0}`
-    : "";
+  const fetchKey = ok ? `${classLevel}|${stream.id}|${subject.value}|${yearsSel.join(',')}|${original ? 1 : 0}` : '';;
 
   useEffect(() => {
-    if (!valid) return undefined;
+    if (!ok) return undefined;
     const ctrl = new AbortController();
     // keep the old list on screen (dimmed) while the new one loads
     setState((s) => ({
@@ -197,7 +186,7 @@ export default function PaperResults() {
     fetchPapers({
       classLevel,
       streamId: stream.id,
-      subjects: subjectsSel,
+      subjects: [subject.value],
       years: yearsSel,
       signal: ctrl.signal,
       original,
@@ -210,16 +199,9 @@ export default function PaperResults() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchKey, retry]);
 
-  const subjectCount = subjectsSel.length || subjectOptions.length;
   const yearCount = yearsSel.length || YEAR_OPTIONS.length;
-  // count the papers actually listed, once loaded (a subject-year with two groups counts as two)
-  const total =
-    state.status === "ready" ? state.items.length : subjectCount * yearCount;
-
-  // the Group-by switch only makes sense when there are several subjects AND several years
-  const showSwitch = subjectCount > 1 && yearCount > 1;
-  const groupBy =
-    subjectCount === 1 ? "subject" : yearCount === 1 ? "year" : prefs.groupBy;
+  const total = state.status === 'ready' ? state.items.length : yearCount;
+  const groupBy = 'subject';   // one subject per page, so the rows are always its years
 
   const groups = useMemo(
     () => buildGroups(state.items, groupBy, subjectOptions),
@@ -229,8 +211,6 @@ export default function PaperResults() {
   // collapse / expand
   const [collapsed, setCollapsed] = useState(() => new Set());
   const groupIds = groups.map((g) => `${groupBy}:${g.key}`);
-  const allCollapsed =
-    groupIds.length > 0 && groupIds.every((id) => collapsed.has(id));
   const toggleGroup = (id) =>
     setCollapsed((prev) => {
       const next = new Set(prev);
@@ -239,69 +219,41 @@ export default function PaperResults() {
       return next;
     });
 
-  const toggleAll = () =>
-    setCollapsed((prev) => {
-      const next = new Set(prev);
-      groupIds.forEach((id) => (allCollapsed ? next.delete(id) : next.add(id)));
-      return next;
-    });
-
   // with one group left there is nothing to collapse, so forget any old collapsed state
   useEffect(() => {
     if (groups.length <= 1) setCollapsed(new Set());
   }, [groups.length]);
 
-  if (!valid) return <Navigate to="/papers" replace />;
+    if (!ok) return <Navigate to={valid ? `/papers?${params.toString()}` : '/papers'} replace />;
 
   return (
     <section className="container results">
       <header className="rhead">
-        <Reveal className="rhead__top">
-          <span className="pill-label">Class {classLevel}</span>
-          <Link to={`/papers?${params.toString()}`} className="rhead__change">
-            <EditIcon width={16} height={16} /> Change class or stream
-          </Link>
-        </Reveal>
-        <Reveal as="h1" variant="line" delay={80} className="rhead__title">
-          {stream.name}
-        </Reveal>
-        <Reveal as="p" delay={180} className="rhead__sub">
-          {plural(total, "paper")} · {plural(subjectCount, "subject")} ·{" "}
-          {plural(yearCount, "year")}
-        </Reveal>
-      </header>
-
-      <Reveal className="rfilters glass" delay={260}>
-        <PillRow
-          label="Subjects"
-          noun="subject"
-          allLabel="All subjects"
-          options={subjectOptions}
-          value={subjectsSel}
-          onChange={(v) => update({ subjects: v })}
-        />
-        <PillRow
-          label="Years"
-          noun="year"
-          allLabel="All years"
-          options={YEAR_OPTIONS}
-          value={yearsSel}
-          onChange={(v) => update({ years: v })}
-        />
+      <Reveal className="rhead__top">
+        <span className="pill-label">Class {classLevel} · {stream.name}</span>
+        <Link to={`/papers?${params.toString()}`} className="rhead__change">
+          <EditIcon width={16} height={16} /> Change class or stream
+        </Link>
       </Reveal>
+      <Reveal as="h1" variant="line" delay={80} className="rhead__title">{subject.label}</Reveal>
+      <Reveal as="p" delay={180} className="rhead__sub">
+        {plural(total, 'paper')} · {plural(yearCount, 'year')}
+      </Reveal>
+    </header>
+
+    <Reveal className="rfilters glass" delay={260}>
+      <div className="pillrow">
+        <span className="pillrow__label">Subject</span>
+        <div className="pillrow__pills">
+          <Segmented label="Subject" options={subjectOptions} value={subject.value}
+            onChange={(v) => update({ subject: [v], subjects: [] })} />
+        </div>
+      </div>
+      <PillRow label="Years" noun="year" allLabel="All years"
+        options={YEAR_OPTIONS} value={yearsSel} onChange={(v) => update({ years: v })} />
+    </Reveal>
 
       <Reveal className="rcontrols" delay={340}>
-        {showSwitch && (
-          <div className="rcontrols__item">
-            <span className="rcontrols__label">Group by</span>
-            <Segmented
-              label="Group by"
-              options={GROUP_OPTIONS}
-              value={groupBy}
-              onChange={(v) => setPrefs((p) => ({ ...p, groupBy: v }))}
-            />
-          </div>
-        )}
         <div className="rcontrols__item">
           <span className="rcontrols__label">Show</span>
           <Segmented
@@ -319,23 +271,6 @@ export default function PaperResults() {
             hint="Show the original, unedited PDFs instead of the scanned ones"
           />
         </div>
-        {groups.length > 1 && (
-          <button
-            type="button"
-            className="rcontrols__toggle"
-            onClick={toggleAll}
-          >
-            <ChevronIcon
-              width={16}
-              height={16}
-              style={{
-                transform: allCollapsed ? "rotate(-90deg)" : "rotate(180deg)",
-                transition: "transform .3s",
-              }}
-            />
-            {allCollapsed ? "Expand all" : "Collapse all"}
-          </button>
-        )}
       </Reveal>
       {state.status === "ready" &&
         original &&
