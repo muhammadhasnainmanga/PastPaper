@@ -15,7 +15,7 @@ export const DEV = {
   ],
   stack: [
     { title: 'Frontend', items: ['HTML', 'CSS', 'JavaScript', 'React'] },
-    { title: 'Backend & Deployment', items: ['Node.js', 'SQL', 'PostgreSQL', 'Railway', 'Netlify', 'Backblaze B2', 'Cloudinary'] },
+    { title: 'Backend & Deployment', items: ['Node.js', 'SQL', 'PostgreSQL', 'Railway', 'Netlify', 'Backblaze B2', 'Cloudinary', 'Azure', 'Cloudfare'] },
     { title: 'Problem Solving', items: ['C/C++', 'Python', 'LeetCode 100+', 'Codeforces 15+', 'HackerRank 200+', 'GeeksforGeeks 50+'] },
   ],
   profiles: [
