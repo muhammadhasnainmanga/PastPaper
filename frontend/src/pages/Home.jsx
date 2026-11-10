@@ -1,7 +1,6 @@
 import Hero from '../components/Hero/Hero.jsx';
 import StreamsSection from '../components/StreamsSection/StreamsSection.jsx';
 import { useSeo } from '../hooks/useSeo.js';
-import './Home.css';
 
 export default function Home() {
   useSeo({
@@ -11,9 +10,9 @@ export default function Home() {
   });
 
   return (
-    <main className="home-page">
+    <>
       <Hero />
       <StreamsSection />
-    </main>
+    </>
   );
 }

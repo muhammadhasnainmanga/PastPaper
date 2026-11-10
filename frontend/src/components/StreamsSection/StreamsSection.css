@@ -98,6 +98,7 @@
 @media (max-width: 700px) {
   .streams {
     padding-top: 8px;
+    background: linear-gradient(180deg, var(--green-50) 0%, var(--bg) 280px);
   }
   .streams__panel { border-radius: 34px; }
   .slider { --card-h: 500px; }
