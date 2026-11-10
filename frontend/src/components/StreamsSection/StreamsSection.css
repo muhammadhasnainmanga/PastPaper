@@ -96,7 +96,9 @@
 }
 
 @media (max-width: 700px) {
-  .streams { padding-top: 8px; }
+  .streams {
+    padding-top: 8px;
+  }
   .streams__panel { border-radius: 34px; }
   .slider { --card-h: 500px; }
   .slide { width: calc(100% - 56px); }

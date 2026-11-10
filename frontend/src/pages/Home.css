@@ -1,0 +1,16 @@
+.home-page {
+  background: var(--bg);
+}
+
+@media (max-width: 760px) {
+  .home-page {
+    background: linear-gradient(
+      180deg,
+      var(--bg) 0,
+      #f7fbf8 340px,
+      var(--green-50) 760px,
+      #f7fbf8 1280px,
+      var(--bg) 1780px
+    );
+  }
+}

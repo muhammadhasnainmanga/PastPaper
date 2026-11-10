@@ -97,7 +97,7 @@
 }
 
 .hero__pause-overlay {
-  inset: auto 16px 16px auto;
+  inset: auto auto 16px 16px;
   width: 42px;
   height: 42px;
   border-radius: 50%;
@@ -128,8 +128,13 @@
   }
 
   .hero__content {
-    align-items: stretch;
+    align-items: center;
+    text-align: center;
     gap: 18px;
+  }
+
+  .hero__sub {
+    margin-inline: auto;
   }
 
   .hero__title {
