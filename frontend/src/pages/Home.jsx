@@ -4,8 +4,8 @@ import { useSeo } from '../hooks/useSeo.js';
 
 export default function Home() {
   useSeo({
-    title: 'Sindh Board Class 11 & 12 Past Papers, Books & MCQs | PastPaper',
-    description: 'Download Sindh Board Class 11 and 12 past papers by subject and year, plus free books and MCQ practice.',
+    title: 'Sindh Board Past Papers, Books & MCQs: Class 11 & 12 (BIEK)',
+    description: 'Download Sindh Board (BIEK Karachi) Class 11 and 12 past papers by subject and year, free STBB textbooks and MCQ quiz practice.',
     path: '/',
   });
 

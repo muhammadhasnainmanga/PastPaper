@@ -8,7 +8,6 @@ import { useSeo } from '../hooks/useSeo.js';
 import './Books.css';
 
 const CLASS_KEY = 'pastpaper:books-class';
-
 // remembered class, otherwise the class they last used on the papers page
 function startClass() {
   try {
@@ -29,8 +28,8 @@ function Skeleton() {
 
 export default function Books() {
   useSeo({
-    title: 'Sindh Board Class 11 & 12 Books: Free PDF Download | PastPaper',
-    description: 'Free downloadable Sindh Board textbooks for Class 11 and Class 12, ready to read or download.',
+    title: 'Sindh Board Books Class 11 & 12: STBB Textbooks PDF',
+    description: 'Free STBB textbooks for Sindh Board Class 11 and 12. Read online or download Physics, Chemistry, Maths and more as PDFs.',
     path: '/books',
   });
 

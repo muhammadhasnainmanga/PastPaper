@@ -4,8 +4,8 @@ import { useSeo } from '../hooks/useSeo.js';
 
 export default function PastPapers() {
   useSeo({
-    title: 'Sindh Board Past Papers: Class 11 & 12 by Subject and Year | PastPaper',
-    description: 'Choose your class, stream, subject and year to get Sindh Board past papers as objective, subjective or full PDFs.',
+    title: 'Sindh Board Past Papers: Class 11 & 12 by Subject & Year',
+    description: 'Class 11 (1st year) and Class 12 (2nd year) Sindh Board past papers, 2021 to 2026. Pick a subject and year for objective, subjective or full paper PDFs.',
     path: '/papers',
   });
 

@@ -25,8 +25,8 @@ const yearsText = (v) => (!v.length ? 'All years' : v.length <= 3 ? v.join(', ')
 
 export default function Quiz() {
   useSeo({
-    title: 'Sindh Board MCQ Practice: Class 11 & 12 Objective Questions | PastPaper',
-    description: 'Practice objective questions from Sindh Board past papers with instant feedback or exam mode.',
+    title: 'Sindh Board MCQs Class 11 & 12: Objective Quiz Practice',
+    description: 'Practice Sindh Board Class 11 and 12 MCQs from past papers, with instant answers or exam mode.',
     path: '/quiz',
   });
 
