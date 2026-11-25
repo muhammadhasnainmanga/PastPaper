@@ -17,6 +17,18 @@ app.use('/api', (req, res, next) => { res.setHeader('X-Robots-Tag', 'noindex'); 
 // at most 200 requests a minute per visitor
 app.use('/api', rateLimit({ windowMs: 60 * 1000, limit: 200, standardHeaders: true, legacyHeaders: false }));
 
+// A lightweight homepage request wakes the app and Neon before the visitor
+// reaches a page that needs database content.
+app.get('/api/warmup', async (req, res, next) => {
+  try {
+    await query('SELECT 1');
+    res.setHeader('Cache-Control', 'no-store');
+    res.json({ ok: true });
+  } catch (err) {
+    next(err);
+  }
+});
+
 app.use('/api/papers', require('./routes/papers.routes.js'));
 // last resort for errors thrown inside routes
 

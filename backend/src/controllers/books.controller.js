@@ -18,7 +18,7 @@ async function list(req, res, next) {
     const classLevel = Number(req.query.class);
     if (![11, 12].includes(classLevel)) throw new HttpError(400, 'class must be 11 or 12');
     const rows = await repo.findByClass(classLevel);
-    res.setHeader('Cache-Control', 'public, max-age=300');
+    res.setHeader('Cache-Control', 'public, max-age=300, stale-while-revalidate=86400');
     res.json({
       items: rows.map((r) => ({
         id: r.id,

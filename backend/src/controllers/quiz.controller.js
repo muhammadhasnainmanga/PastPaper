@@ -1,7 +1,7 @@
 const { parseClass, parseSubject, parseYears } = require('../validators/quiz.validator.js');
 const repo = require('../repositories/quiz.repository.js');
 
-const cache = (res) => res.setHeader('Cache-Control', 'public, max-age=60'); // a fixed answer shows up within a minute
+const cache = (res) => res.setHeader('Cache-Control', 'public, max-age=300, stale-while-revalidate=86400');
 
 async function subjects(req, res, next) {
   try {

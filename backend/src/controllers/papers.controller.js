@@ -10,6 +10,7 @@ const { getFileStream, getSignedFileUrl } = require('../services/storage.js');
 async function list(req, res, next) {
   try {
     const filters = parseListQuery(req.query);
+    res.setHeader('Cache-Control', 'public, max-age=300, stale-while-revalidate=86400');
     res.json(await service.listPapers(filters));
   } catch (err) {
     next(err);

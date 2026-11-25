@@ -8,3 +8,24 @@ const apiRoot = (configuredApiUrl || '').replace(/\/+$/, '');
 export const API_BASE = apiRoot
   ? (apiRoot.endsWith('/api') ? apiRoot : `${apiRoot}/api`)
   : '/api';
+
+let warmupRequest;
+let lastWarmupAt = 0;
+
+export function warmUpApi() {
+  const now = Date.now();
+  if (warmupRequest) return warmupRequest;
+  if (now - lastWarmupAt < 5 * 60 * 1000) return Promise.resolve();
+
+  lastWarmupAt = now;
+  warmupRequest = fetch(`${API_BASE}/warmup`, {
+    method: 'GET',
+    cache: 'no-store',
+    credentials: 'omit',
+    keepalive: true,
+  })
+    .catch(() => {})
+    .finally(() => { warmupRequest = undefined; });
+
+  return warmupRequest;
+}
